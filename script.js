@@ -24,7 +24,6 @@
     },
     cacheDom: function () {
       this.scoreContainer = document.querySelector('.scoreContainer');
-      this.pScoreContainer = document.querySelector('.pScoresContainer');
       this.gameContainer = document.querySelector('.gameboard');
       this.gameCells = document.querySelectorAll('.cell');
     },
@@ -34,13 +33,8 @@
           const cellElement = this.gameCells[rowIndex * 3 + cellIndex];
           cellElement.textContent = cell === 0 ? '' : cell;
         });
-        this.scoreContainer.textContent = `Score: ${this.score.player1} - ${this.score.player2}`;
-        this.pScoreContainer.textContent = `Player 1: ${this.score.player1}, Player 2: ${this.score.player2}`;
       });
-
-      // Update score containers
-      this.scoreContainer.textContent = `Score: ${this.score.player1} - ${this.score.player2}`;
-      this.pScoreContainer.textContent = `Player 1: ${this.score.player1}, Player 2: ${this.score.player2}`;
+      this.scoreContainer.textContent = `Game Score: ${this.score.player1} - ${this.score.player2}`;
     },
     bindEvents: function () {
       this.gameCells.forEach((slot) => {
@@ -151,12 +145,11 @@
       }
 
       if (isDraw) {
-        // If the board is full and no winner, it's a draw. Reset the game.
         this.newRound();
-        return 'draw'; // Return 'draw' to indicate a draw condition
+        return 'draw';
       }
 
-      return null; // No win condition met
+      return null;
     },
 
     dropToken: function (id) {

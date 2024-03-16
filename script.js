@@ -24,8 +24,10 @@
     },
     cacheDom: function () {
       this.scoreContainer = document.querySelector('.scoreContainer');
-      this.gameContainer = document.querySelector('.gameboard');
+      this.gameContainer = document.querySelector('.gameBoard');
       this.gameCells = document.querySelectorAll('.cell');
+      this.playBtn = document.querySelector('#playBtn');
+      this.restartBtn = document.querySelector('#restartBtn');
     },
     render: function () {
       this.gameboard.forEach((row, rowIndex) => {
@@ -35,12 +37,28 @@
         });
       });
       this.scoreContainer.textContent = `Game Score: ${this.score.player1} - ${this.score.player2}`;
+      if (this.checkScore()) {
+        this.scoreContainer.textContent = `The winner is ${this.checkScore()}`;
+        this.gameContainer.style.display = 'none';
+        this._resetScore();
+      }
     },
     bindEvents: function () {
       this.gameCells.forEach((slot) => {
         slot.addEventListener('click', (e) => {
           this._game(e);
         });
+      });
+      this.playBtn.addEventListener('click', () => {
+        this.gameContainer.style.display = 'grid';
+        this.scoreContainer.textContent = `Game Score: ${this.score.player1} - ${this.score.player2}`;
+        if (this.checkScore()) {
+          this._resetScore();
+        }
+      });
+      this.restartBtn.addEventListener('click', () => {
+        this._resetScore();
+        this.render();
       });
     },
     newRound: function () {
@@ -70,11 +88,9 @@
     checkScore: function () {
       if (this.score.player1 >= 3) {
         const winner = this.player1.name;
-        this._resetScore();
         return winner;
       } else if (this.score.player2 >= 3) {
         const winner = this.player2.name;
-        this._resetScore();
         return winner;
       }
     },
@@ -145,7 +161,10 @@
       }
 
       if (isDraw) {
-        this.newRound();
+        setTimeout(() => {
+          this.newRound();
+          this.render();
+        }, 1000);
         return 'draw';
       }
 
